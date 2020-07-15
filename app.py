@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, session
 from MethodUtil import MethodUtil
 from userlogic import UserLogic
 from userobj import UserObj
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
@@ -38,7 +39,13 @@ def loginform():
         user = request.form["user"]
         password = request.form["password"]
         print(password)
-        # print(generate_password_hash(password))
+        print(generate_password_hash(password))
+        print(
+            check_password_hash(
+                "pbkdf2:sha256:150000$Q5PULnGV$bdc51198ad18432f00fea6a5cb59bec4d7977cb28d3e7ef575bab3b93bfa9628",
+                "12345",
+            )
+        )
         logic = UserLogic()
         userdata = logic.getUserData(user)
         # session["user"] = userdata
