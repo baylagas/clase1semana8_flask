@@ -28,6 +28,17 @@ def logout():
     return "Now you are logged out"
 
 
+@app.route("/loginform", methods=MethodUtil.list_ALL())
+def loginform():
+    if request.method == "GET":
+        return render_template("loginform.html")
+    if request.method == "POST":
+        user = request.form["user"]
+        password = request.form["password"]
+        print(password)
+        return render_template("dashboard.html", user=user)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
     # app.run(debug=True)
