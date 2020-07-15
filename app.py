@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 from MethodUtil import MethodUtil
+from userlogic import UserLogic
 
 
 app = Flask(__name__)
@@ -36,7 +37,9 @@ def loginform():
         user = request.form["user"]
         password = request.form["password"]
         print(password)
-        return render_template("dashboard.html", user=user)
+        logic = UserLogic()
+        userdata = logic.getUserData(user)
+        return render_template("dashboard.html", userdata=userdata)
 
 
 if __name__ == "__main__":
