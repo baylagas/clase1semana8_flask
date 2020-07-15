@@ -38,15 +38,20 @@ def loginform():
         user = request.form["user"]
         password = request.form["password"]
         print(password)
+        # print(generate_password_hash(password))
         logic = UserLogic()
         userdata = logic.getUserData(user)
-        session["user"] = userdata
+        # session["user"] = userdata
         if userdata is not None:
             if userdata.password == password:
                 if userdata.role == "admin":
-                    return render_template("dashboard_admin.html", userdata=userdata)
+                    return render_template(
+                        "dashboard_admin.html", userdata=userdata.user
+                    )
                 else:
-                    return render_template("dashboard_user.html", userdata=userdata)
+                    return render_template(
+                        "dashboard_user.html", userdata=userdata.user
+                    )
             else:
                 return render_template("loginform.html", message="hubo error")
         else:
