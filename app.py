@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 from MethodUtil import MethodUtil
 from userlogic import UserLogic
+from userobj import UserObj
 
 
 app = Flask(__name__)
@@ -32,14 +33,24 @@ def logout():
 @app.route("/loginform", methods=MethodUtil.list_ALL())
 def loginform():
     if request.method == "GET":
-        return render_template("loginform.html")
+        return render_template("loginform.html", message="")
     if request.method == "POST":
         user = request.form["user"]
         password = request.form["password"]
         print(password)
         logic = UserLogic()
         userdata = logic.getUserData(user)
-        return render_template("dashboard.html", userdata=userdata)
+        session["user"] = userdata
+        if userdata is not None:
+            if userdata.password == password:
+                if userdata.role == "admin":
+                    return render_template("dashboard_admin.html", userdata=userdata)
+                else:
+                    return render_template("dashboard_user.html", userdata=userdata)
+            else:
+                return render_template("loginform.html", message="hubo error")
+        else:
+            return render_template("loginform.html", message="hubo error")
 
 
 if __name__ == "__main__":
